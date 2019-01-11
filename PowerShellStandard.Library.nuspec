@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>PowerShell.ScriptAnalyzer</id>
+    <version>1.0.0-preview01</version>
+    <authors>Microsoft</authors>
+    <owners>Microsoft,PowerShellTeam</owners>
+    <projectUrl>https://github.com/PowerShell/PowerShellStandard</projectUrl>
+    <iconUrl>https://github.com/PowerShell/PowerShell/blob/master/assets/Powershell_64.png</iconUrl>
+    <licenseUrl>https://github.com/PowerShell/PowerShell/blob/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Contains the reference assemblies for PowerShell ScriptAnalyzer</description>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <tags>PowerShell, reference, netstandard2, netstandard2.0</tags>
+    <references>
+      <reference file="Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules.dll" />
+      <reference file="Microsoft.Windows.PowerShell.ScriptAnalyzer.dll" />
+    </references>
+  </metadata>
+  <files>
+    <file src="./out/PSScriptAnalyzer/coreclr/Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules.dll" target="lib/netcoreapp" />
+    <file src="./out/PSScriptAnalyzer/coreclr/Microsoft.Windows.PowerShell.ScriptAnalyzer.dll" target="lib/netcoreapp" />
+  </files>
+</package>
+
