@@ -4,7 +4,7 @@
 using System;
 using System.Management.Automation;
 
-namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
+namespace Microsoft.PowerShell.ScriptAnalyzer
 {
     internal struct CommandLookupKey : IEquatable<CommandLookupKey>
     {

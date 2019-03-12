@@ -26,7 +26,7 @@ The purpose of this documentation is to serve as a basic guide on creating your 
 - Output type should be DiagnosticRecord:
 
 ``` PowerShell
-[OutputType([Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
+[OutputType([Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
 ```
 
 - Make sure each function takes either a Token array or an Ast as a parameter. The _Ast_ parameter name must end with 'Ast' and the _Token_ parameter name must end with 'Token'
@@ -54,7 +54,7 @@ Param
 - DiagnosticRecord should have at least four properties: Message, Extent, RuleName and Severity
 
 ``` PowerShell
-$result = [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]]@{
+$result = [Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]]@{
     "Message"  = "This is a sample rule"
     "Extent"   = $ast.Extent
     "RuleName" = $PSCmdlet.MyInvocation.InvocationName
@@ -70,11 +70,11 @@ Optionally, since version 1.17.0, a `SuggestedCorrections` property of type `IEn
 [string]$correction = 'Correct text that replaces Extent text'
 [string]$file = $MyInvocation.MyCommand.Definition
 [string]$optionalDescription = 'Useful but optional description text'
-$correctionExtent = New-Object 'Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent' $startLineNumber,$endLineNumber,$startColumnNumber,$endColumnNumber,$correction,$description
-$suggestedCorrections = New-Object System.Collections.ObjectModel.Collection['Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent']
+$correctionExtent = New-Object 'Microsoft.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent' $startLineNumber,$endLineNumber,$startColumnNumber,$endColumnNumber,$correction,$description
+$suggestedCorrections = New-Object System.Collections.ObjectModel.Collection['Microsoft.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent']
 $suggestedCorrections.add($correctionExtent) | out-null
 
-[Microsoft.Windows.Powershell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
+[Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
     "Message"              = "This is a rule with a suggested correction"
     "Extent"               = $ast.Extent
     "RuleName"             = $PSCmdlet.MyInvocation.InvocationName
@@ -107,14 +107,14 @@ Export-ModuleMember -Function (FunctionName)
         .INPUTS
         [System.Management.Automation.Language.ScriptBlockAst]
         .OUTPUTS
-        [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]]
+        [Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]]
         .NOTES
         None
 #>
 function Measure-RequiresRunAsAdministrator
 {
     [CmdletBinding()]
-    [OutputType([Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
+    [OutputType([Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
     Param
     (
         [Parameter(Mandatory = $true)]
@@ -172,7 +172,7 @@ function Measure-RequiresRunAsAdministrator
                 if ((!$ScriptBlockAst.ScriptRequirements.IsElevationRequired) -and
                 ($methodAst.Count -ne 0) -and ($assignmentAst.Count -ne 0))
                 {
-                    $result = [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
+                    $result = [Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
                         'Message' = $Messages.MeasureRequiresRunAsAdministrator
                         'Extent' = $assignmentAst.Extent
                         'RuleName' = $PSCmdlet.MyInvocation.InvocationName
@@ -185,7 +185,7 @@ function Measure-RequiresRunAsAdministrator
             {
                 if (($methodAst.Count -ne 0) -and ($assignmentAst.Count -ne 0))
                 {
-                    $result = [Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
+                    $result = [Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord]@{
                         'Message' = $Messages.MeasureRequiresRunAsAdministrator
                         'Extent' = $assignmentAst.Extent
                         'RuleName' = $PSCmdlet.MyInvocation.InvocationName

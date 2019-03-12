@@ -1,4 +1,4 @@
-﻿$ruleConfiguration = @{
+$ruleConfiguration = @{
     Enable = $true
     OnSameLine = $true
     NewLineAfter = $true

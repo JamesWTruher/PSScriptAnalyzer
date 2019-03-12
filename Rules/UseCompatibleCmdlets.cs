@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
@@ -11,11 +11,11 @@ using System.IO;
 using System.Linq;
 using System.Management.Automation.Language;
 using System.Text.RegularExpressions;
-using Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic;
+using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 
 using Newtonsoft.Json.Linq;
 
-namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
+namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
 {
     /// <summary>
     /// UseCompatibleCmdlets: Checks if a script uses Cmdlets compatible with a given version and edition of PowerShell.

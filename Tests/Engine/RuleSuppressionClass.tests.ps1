@@ -1,4 +1,4 @@
-﻿$script:skipForV3V4 = $true
+$script:skipForV3V4 = $true
 if ($PSVersionTable.PSVersion -ge [Version]'5.0.0') {
     $script:skipForV3V4 = $false
 }

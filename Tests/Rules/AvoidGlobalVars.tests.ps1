@@ -1,4 +1,4 @@
-﻿$globalMessage = "Found global variable 'Global:1'."
+$globalMessage = "Found global variable 'Global:1'."
 $globalName = "PSAvoidGlobalVars"
 
 $nonInitializedMessage = "Variable 'globalVars' is not initialized. Non-global variables must be initialized. To fix a violation of this rule, please initialize non-global variables."

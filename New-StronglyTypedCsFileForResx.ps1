@@ -1,4 +1,4 @@
-﻿<#
+<#
 # This script can be used to update the *.Designer file if a *.resx ressource file has been updated.
 # However, it is recommended to use Visual Studio instead for editing ressources instead since it takes of that automatically and prodcues cleaner diffs.
 #>
@@ -137,7 +137,7 @@ if (-not (Test-Path "$projectRoot/global.json"))
 }
 $inputFilePath = Join-Path $projectRoot "$project/Strings.resx"
 $outputFilePath = Join-Path $projectRoot "$project/Strings.Designer.cs"
-$className = "Microsoft.Windows.PowerShell.ScriptAnalyzer"
+$className = "Microsoft.PowerShell.ScriptAnalyzer"
 if ($project -eq "Rules")
 {
     $className += ".BuiltinRules"

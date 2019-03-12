@@ -1,4 +1,4 @@
-﻿Import-Module -Verbose PSScriptAnalyzer
+Import-Module -Verbose PSScriptAnalyzer
 $violationMessage = [regex]::Escape('Specify type at the assignment of variable $test')
 $violationName = "PSUseTypeAtVariableAssignment"
 $directory = Split-Path -Parent $MyInvocation.MyCommand.Path

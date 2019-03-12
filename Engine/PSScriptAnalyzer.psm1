@@ -27,7 +27,7 @@ elseif ($PSVersionTable.PSVersion.Major -le 4) {
     Add-Type -Path "$binaryModuleRoot/Newtonsoft.Json.dll"
 }
 
-$binaryModulePath = Join-Path -Path $binaryModuleRoot -ChildPath 'Microsoft.Windows.PowerShell.ScriptAnalyzer.dll'
+$binaryModulePath = Join-Path -Path $binaryModuleRoot -ChildPath 'Microsoft.PowerShell.ScriptAnalyzer.dll'
 $binaryModule = Import-Module -Name $binaryModulePath -PassThru
 
 # When the module is unloaded, remove the nested binary module that was loaded with it
@@ -39,7 +39,7 @@ if (Get-Command Register-ArgumentCompleter -ErrorAction Ignore) {
     $settingPresetCompleter = {
         param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParmeter)
 
-        [Microsoft.Windows.PowerShell.ScriptAnalyzer.Settings]::GetSettingPresets() | `
+        [Microsoft.PowerShell.ScriptAnalyzer.Settings]::GetSettingPresets() | `
             Where-Object {$_ -like "$wordToComplete*"} | `
             ForEach-Object { New-Object System.Management.Automation.CompletionResult $_ }
     }

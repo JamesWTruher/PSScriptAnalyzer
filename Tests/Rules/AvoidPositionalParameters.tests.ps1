@@ -1,4 +1,4 @@
-﻿$violationMessage = "Cmdlet 'Get-Command' has positional parameter. Please use named parameters instead of positional parameters when calling a command."
+$violationMessage = "Cmdlet 'Get-Command' has positional parameter. Please use named parameters instead of positional parameters when calling a command."
 $violationName = "PSAvoidUsingPositionalParameters"
 $directory = Split-Path -Parent $MyInvocation.MyCommand.Path
 $violations = Invoke-ScriptAnalyzer $directory\AvoidPositionalParameters.ps1 | Where-Object {$_.RuleName -eq $violationName}

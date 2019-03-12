@@ -1,7 +1,7 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic;
+using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 using System;
 using System.Collections.Generic;
 #if !CORECLR
@@ -10,7 +10,7 @@ using System.ComponentModel.Composition;
 using System.Management.Automation.Language;
 using System.Globalization;
 
-namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
+namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
 {
     /// <summary>
     /// PossibleIncorrectUsageOfAssignmentOperator: Warn if someone uses '>', '=' or '==' operators inside an if, elseif, while and do-while statement because in most cases that is not the intention.

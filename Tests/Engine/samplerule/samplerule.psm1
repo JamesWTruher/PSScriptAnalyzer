@@ -20,7 +20,7 @@
 function Measure-RequiresRunAsAdministrator
 {
     [CmdletBinding()]
-    [OutputType([Microsoft.Windows.Powershell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
+    [OutputType([Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord[]])]
     Param
     (
         [Parameter(Mandatory = $true)]
@@ -30,12 +30,12 @@ function Measure-RequiresRunAsAdministrator
     )
 
     # The implementation is mocked out for testing purposes only and many properties are deliberately set to null to test if PSSA can cope with it
-    $l=(new-object System.Collections.ObjectModel.Collection["Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent"])
-    $c = (new-object Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent 1,2,3,4,'text','filePath','description')
+    $l=(new-object System.Collections.ObjectModel.Collection["Microsoft.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent"])
+    $c = (new-object Microsoft.PowerShell.ScriptAnalyzer.Generic.CorrectionExtent 1,2,3,4,'text','filePath','description')
     $l.Add($c)
     $extent = $null
     $dr = New-Object `
-            -Typename "Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord" `
+            -Typename "Microsoft.PowerShell.ScriptAnalyzer.Generic.DiagnosticRecord" `
             -ArgumentList "This is help",$extent,$PSCmdlet.MyInvocation.InvocationName,Warning,$null,$null,$l
     $dr.RuleSuppressionID = "MyRuleSuppressionID"
     return $dr

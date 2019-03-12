@@ -156,7 +156,7 @@ function Start-ScriptAnalyzerBuild
     END {
 
         # Build docs either when -Documentation switch is being specified or the first time in a clean repo
-        $documentationFileExists = Test-Path (Join-Path $PSScriptRoot 'out\PSScriptAnalyzer\en-us\Microsoft.Windows.PowerShell.ScriptAnalyzer.dll-Help.xml')
+        $documentationFileExists = Test-Path (Join-Path $PSScriptRoot 'out\PSScriptAnalyzer\en-us\Microsoft.PowerShell.ScriptAnalyzer.dll-Help.xml')
         if ( $Documentation -or -not $documentationFileExists )
         {
             Start-DocumentationBuild
@@ -255,8 +255,8 @@ function Start-ScriptAnalyzerBuild
         Publish-File $itemsToCopyCommon $destinationDir
 
         $itemsToCopyBinaries = @(
-            "$projectRoot\Engine\bin\${config}\${Framework}\Microsoft.Windows.PowerShell.ScriptAnalyzer.dll",
-            "$projectRoot\Rules\bin\${config}\${Framework}\Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules.dll"
+            "$projectRoot\Engine\bin\${config}\${Framework}\Microsoft.PowerShell.ScriptAnalyzer.dll",
+            "$projectRoot\Rules\bin\${config}\${Framework}\Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules.dll"
             "$projectRoot\Rules\bin\${config}\${framework}\Microsoft.PowerShell.CrossCompatibility.dll"
             )
         Publish-File $itemsToCopyBinaries $destinationDirBinaries

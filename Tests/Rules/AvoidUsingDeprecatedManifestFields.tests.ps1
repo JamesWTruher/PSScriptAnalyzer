@@ -1,4 +1,4 @@
-﻿$violationName = "PSAvoidUsingDeprecatedManifestFields"
+$violationName = "PSAvoidUsingDeprecatedManifestFields"
 $directory = Split-Path -Parent $MyInvocation.MyCommand.Path
 $violations = Invoke-ScriptAnalyzer "$directory\TestBadModule\TestDeprecatedManifestFields.psd1" | Where-Object {$_.RuleName -eq $violationName}
 $noViolations = Invoke-ScriptAnalyzer "$directory\TestGoodModule\TestGoodModule.psd1" | Where-Object {$_.RuleName -eq $violationName}

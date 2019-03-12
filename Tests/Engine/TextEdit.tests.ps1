@@ -1,5 +1,5 @@
 Describe "TextEdit Class" {
-    $type = [Microsoft.Windows.PowerShell.ScriptAnalyzer.TextEdit]
+    $type = [Microsoft.PowerShell.ScriptAnalyzer.TextEdit]
 
     Context "Object construction" {
         It "creates the object with correct properties" {

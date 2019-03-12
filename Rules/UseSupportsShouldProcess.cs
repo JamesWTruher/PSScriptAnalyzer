@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 using System;
@@ -9,10 +9,10 @@ using System.ComponentModel.Composition;
 #endif
 using System.Globalization;
 using System.Management.Automation.Language;
-using Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic;
-using Microsoft.Windows.PowerShell.ScriptAnalyzer.Extensions;
+using Microsoft.PowerShell.ScriptAnalyzer.Generic;
+using Microsoft.PowerShell.ScriptAnalyzer.Extensions;
 
-namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
+namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
 {
     /// <summary>
     /// UseSupportsShouldProcess: Checks if a function defines Confirm and/or WhatIf parameters manually instead of using SupportsShouldProcess attribute.

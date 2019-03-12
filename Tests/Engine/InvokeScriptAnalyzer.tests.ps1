@@ -1,4 +1,4 @@
-﻿$sa = Get-Command Invoke-ScriptAnalyzer
+$sa = Get-Command Invoke-ScriptAnalyzer
 $directory = Split-Path -Parent $MyInvocation.MyCommand.Path
 $singularNouns = "PSUseSingularNouns"
 $approvedVerb = "PSUseApprovedVerbs"
@@ -525,7 +525,7 @@ Describe "Test CustomizedRulePath" {
             {
                 if (-not $testingLibraryUsage)
 			    {
-                    $_.FullyQualifiedErrorId | Should -Match "PathNotFound,Microsoft.Windows.PowerShell.ScriptAnalyzer.Commands.InvokeScriptAnalyzerCommand"
+                    $_.FullyQualifiedErrorId | Should -Match "PathNotFound,Microsoft.PowerShell.ScriptAnalyzer.Commands.InvokeScriptAnalyzerCommand"
                 }
             }
         }

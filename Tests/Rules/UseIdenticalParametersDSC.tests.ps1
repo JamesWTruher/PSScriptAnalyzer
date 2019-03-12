@@ -1,4 +1,4 @@
-﻿$violationMessage = "The Test and Set-TargetResource functions of DSC Resource must have the same parameters."
+$violationMessage = "The Test and Set-TargetResource functions of DSC Resource must have the same parameters."
 $violationName = "PSDSCUseIdenticalParametersForDSC"
 $directory = Split-Path -Parent $MyInvocation.MyCommand.Path
 $violations = Invoke-ScriptAnalyzer $directory\DSCResourceModule\DSCResources\MSFT_WaitForAll\MSFT_WaitForAll.psm1 | Where-Object {$_.RuleName -eq $violationName}

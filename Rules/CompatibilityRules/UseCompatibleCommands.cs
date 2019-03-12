@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Management.Automation.Language;
-using Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic;
+using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 using Microsoft.PowerShell.CrossCompatibility.Query;
 using Microsoft.PowerShell.CrossCompatibility.Utility;
 using System;
@@ -13,7 +13,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using Microsoft.PowerShell.CrossCompatibility.Query.Platform;
 
-namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
+namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
 {
 
     /// <summary>

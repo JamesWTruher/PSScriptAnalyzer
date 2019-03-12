@@ -142,7 +142,7 @@ Describe "Test RuleExtension" {
             }
             catch
             {
-                $_.FullyQualifiedErrorId | Should -Match "PathNotFound,Microsoft.Windows.PowerShell.ScriptAnalyzer.Commands.GetScriptAnalyzerRuleCommand"
+                $_.FullyQualifiedErrorId | Should -Match "PathNotFound,Microsoft.PowerShell.ScriptAnalyzer.Commands.GetScriptAnalyzerRuleCommand"
             }
         }
 

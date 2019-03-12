@@ -1,4 +1,4 @@
-﻿$functionErroMessage = "Avoid creating functions with a Global scope."
+$functionErroMessage = "Avoid creating functions with a Global scope."
 $violationName = "PSAvoidGlobalFunctions"
 
 $directory = Split-Path -Parent $MyInvocation.MyCommand.Path
