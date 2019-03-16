@@ -3,7 +3,9 @@
 
 # Build module for PowerShell ScriptAnalyzer
 $projectRoot = $PSScriptRoot
-$destinationDir = Join-Path -Path $projectRoot -ChildPath (Join-Path -Path "out" -ChildPath "PSScriptAnalyzer")
+$data = Import-PowerShellDataFile (Join-Path -path $PSScriptRoot -ChildPath Engine -AdditionalChildPath PSScriptAnalyzer.psd1)
+$version = $data.ModuleVersion
+$script:destinationDir = Join-Path -Path $projectRoot -ChildPath "out" -AdditionalChildPath "PSScriptAnalyzer","$version"
 
 function Publish-File
 {
@@ -118,8 +120,7 @@ function Copy-CompatibilityProfiles
     }
 
     $profileDir = [System.IO.Path]::Combine($PSScriptRoot, 'PSCompatibilityAnalyzer', 'profiles')
-    $destinationDir = [System.IO.Path]::Combine($PSScriptRoot, 'out', 'PSScriptAnalyzer')
-    $destination = Join-Path $destinationDir 'compatibility_profiles.zip'
+    $destination = Join-Path $script:destinationDir 'compatibility_profiles.zip'
 
     if (Test-Path -LiteralPath $destinationDir -PathType Container)
     {
@@ -168,14 +169,11 @@ function Start-ScriptAnalyzerBuild
     END {
 
         # Build docs either when -Documentation switch is being specified or the first time in a clean repo
-        $documentationFileExists = Test-Path (Join-Path $PSScriptRoot 'out\PSScriptAnalyzer\en-us\Microsoft.Windows.PowerShell.ScriptAnalyzer.dll-Help.xml')
+        $documentationFileExists = Test-Path (Join-Path $script:destinationDir 'en-us\Microsoft.Windows.PowerShell.ScriptAnalyzer.dll-Help.xml')
         if ( $Documentation -or -not $documentationFileExists )
         {
             Start-DocumentationBuild
         }
-
-        # Destination for the composed module when built
-        $destinationDir = "$projectRoot\out\PSScriptAnalyzer"
 
         if ( $All )
         {
@@ -217,24 +215,23 @@ function Start-ScriptAnalyzerBuild
             "$projectRoot\Engine\ScriptAnalyzer.format.ps1xml", "$projectRoot\Engine\ScriptAnalyzer.types.ps1xml"
             )
 
-        $destinationDir = "$projectRoot\out\PSScriptAnalyzer"
         switch ($PSVersion)
         {
             3
             {
-                $destinationDirBinaries = "$destinationDir\PSv3"
+                $destinationDirBinaries = "$script:destinationDir\PSv3"
             }
             4
             {
-                $destinationDirBinaries = "$destinationDir\PSv4"
+                $destinationDirBinaries = "$script:destinationDir\PSv4"
             }
             5
             {
-                $destinationDirBinaries = "$destinationDir"
+                $destinationDirBinaries = "$script:destinationDir"
             }
             6
             {
-                $destinationDirBinaries = "$destinationDir\coreclr"
+                $destinationDirBinaries = "$script:destinationDir\coreclr"
             }
             default
             {
@@ -264,7 +261,7 @@ function Start-ScriptAnalyzerBuild
             Pop-Location
         }
 
-        Publish-File $itemsToCopyCommon $destinationDir
+        Publish-File $itemsToCopyCommon $script:destinationDir
 
         $itemsToCopyBinaries = @(
             "$projectRoot\Engine\bin\${config}\${Framework}\Microsoft.Windows.PowerShell.ScriptAnalyzer.dll",
@@ -274,7 +271,7 @@ function Start-ScriptAnalyzerBuild
         Publish-File $itemsToCopyBinaries $destinationDirBinaries
 
         $settingsFiles = Get-Childitem "$projectRoot\Engine\Settings" | ForEach-Object -MemberName FullName
-        Publish-File $settingsFiles (Join-Path -Path $destinationDir -ChildPath Settings)
+        Publish-File $settingsFiles (Join-Path -Path $script:destinationDir -ChildPath Settings)
 
         if ($framework -eq 'net452') {
             Copy-Item -path "$projectRoot\Rules\bin\${config}\${framework}\Newtonsoft.Json.dll" -Destination $destinationDirBinaries
