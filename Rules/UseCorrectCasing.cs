@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation.Language;
-using Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic;
+using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 using System.Management.Automation;
 using System.IO;
 using System.Runtime.InteropServices;

@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 using System.Management.Automation;
 using System.Linq;
 
-namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
+namespace Microsoft.PowerShell.ScriptAnalyzer
 {
     /// <summary>
     /// Provides threadsafe caching around CommandInfo lookups with `Get-Command -Name ...`.

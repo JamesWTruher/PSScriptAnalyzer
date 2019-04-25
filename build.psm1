@@ -392,6 +392,10 @@ function ConvertTo-PortableVersion {
     foreach ( $v in $strVersion ) {
         $ver, $pre = $v.split("-",2)
         try {
+            # sometimes the version can look like:   2.1.403 [/Users/jimtru/.dotnet/sdk]
+            # so we need to get only the version number
+            $ver = $ver.Trim()
+            $ver = $ver.Split(" ")[0]
             [int]$major, [int]$minor, [int]$patch, $unused = $ver.Split(".",4)
             if ( -not $pre ) {
                 $pre = $unused
