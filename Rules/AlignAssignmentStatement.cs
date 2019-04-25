@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Linq;
 using System.Management.Automation.Language;
@@ -16,9 +13,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AlignAssignmentStatement: Checks if consecutive assignment statements are aligned.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class AlignAssignmentStatement : ConfigurableRule
     {
         // We keep this switch even though the rule has only one switch (this) as of now, because we want

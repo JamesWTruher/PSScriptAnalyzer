@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -25,7 +24,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// CmdletSingularNoun: Analyzes scripts to check that all defined cmdlets use singular nouns.
     /// 
     /// </summary>
-    [Export(typeof(IScriptRule))]
     public class CmdletSingularNoun : IScriptRule {
 
         private readonly string[] nounWhiteList =

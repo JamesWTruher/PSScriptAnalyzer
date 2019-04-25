@@ -3,9 +3,6 @@
 
 using System;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 
 namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
@@ -13,9 +10,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// InvokeExpressionRule: Check to make sure that Invoke-Expression is not used.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class InvokeExpressionRule : AvoidCmdletGeneric
     {
         /// <summary>

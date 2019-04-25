@@ -7,9 +7,6 @@ using System.Collections.Generic;
 using System.Management.Automation;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Reflection;
 
@@ -18,9 +15,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseShouldProcessCorrectly: Analyzes the ast to check that if the ShouldProcess attribute is present, the function calls ShouldProcess and vice versa.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class UseShouldProcessCorrectly : IScriptRule
     {
         private Ast ast;

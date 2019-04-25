@@ -4,9 +4,6 @@
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 using System;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Management.Automation.Language;
 using System.Globalization;
 
@@ -16,9 +13,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// PossibleIncorrectUsageOfRedirectionOperator: Warn if someone uses '>' or '>=' inside an if, elseif, while or do-while statement because in most cases that is not the intention.
     /// The origin of this rule is that people often forget that operators change when switching between different languages such as C# and PowerShell.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class PossibleIncorrectUsageOfRedirectionOperator : AstVisitor, IScriptRule
     {
         /// <summary>

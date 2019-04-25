@@ -4,9 +4,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseSupportsShouldProcess: Checks if a function defines Confirm and/or WhatIf parameters manually instead of using SupportsShouldProcess attribute.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class UseSupportsShouldProcess : IScriptRule
     {
         private const char whitespace = ' ';

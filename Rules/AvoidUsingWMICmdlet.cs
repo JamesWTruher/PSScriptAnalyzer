@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 
 namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
@@ -15,9 +12,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidUsingWMICmdlet: Avoid Using Get-WMIObject, Remove-WMIObject, Invoke-WmiMethod, Register-WmiEvent, Set-WmiInstance
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class AvoidUsingWMICmdlet : IScriptRule
     {
         /// <summary>

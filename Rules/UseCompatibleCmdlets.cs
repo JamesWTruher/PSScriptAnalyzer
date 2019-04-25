@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -19,12 +16,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
 {
     /// <summary>
     /// UseCompatibleCmdlets: Checks if a script uses Cmdlets compatible with a given version and edition of PowerShell.
-    /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
-    /// <summary>
-    /// A class to check if a script uses Cmdlets compatible with a given version and edition of PowerShell.
     /// </summary>
     public class UseCompatibleCmdlets : AstVisitor, IScriptRule
     {

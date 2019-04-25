@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 using System.IO;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 
 namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
@@ -16,9 +13,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidAlias: Check if help file uses utf8 encoding
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class UseUTF8EncodingForHelpFile : IScriptRule
     {
         /// <summary>

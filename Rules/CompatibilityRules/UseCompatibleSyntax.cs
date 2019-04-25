@@ -16,9 +16,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// Rule to diagnose syntactic incompatibilities with scripts
     /// across PowerShell versions.
     /// </summary>
-#if !CORECLR
-    [System.ComponentModel.Composition.Export(typeof(IScriptRule))]
-#endif
     public class UseCompatibleSyntax : ConfigurableRule
     {
         private static readonly Version s_v3 = new Version(3,0);

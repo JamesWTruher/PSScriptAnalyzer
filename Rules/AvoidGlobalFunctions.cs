@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
@@ -15,9 +12,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidGlobalFunctions: Checks that global functions are not used within modules.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class AvoidGlobalFunctions : AstVisitor, IScriptRule
     {
         private List<DiagnosticRecord> records;

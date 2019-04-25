@@ -4,9 +4,6 @@
 using System;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Linq;
 
@@ -15,9 +12,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidUsingComputerNameHardcoded: Check that parameter ComputerName is not hardcoded.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class AvoidUsingComputerNameHardcoded : AvoidParameterGeneric
     {
         private readonly string[] localhostRepresentations = new string[]

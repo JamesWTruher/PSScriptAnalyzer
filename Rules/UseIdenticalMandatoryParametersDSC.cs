@@ -7,9 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -26,9 +23,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// UseIdenticalMandatoryParametersDSC: Check that the Get/Test/Set TargetResource
     /// have identical mandatory parameters.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IDSCResourceRule))]
-#endif
     public class UseIdenticalMandatoryParametersDSC : IDSCResourceRule
     {
         private bool isDSCClassCacheInitialized = false;

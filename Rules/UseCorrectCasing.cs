@@ -8,9 +8,6 @@ using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 using System.Management.Automation;
 using System.IO;
 using System.Runtime.InteropServices;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 
 namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
@@ -18,9 +15,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseCorrectCasing: Check if cmdlet is cased correctly.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class UseCorrectCasing : ConfigurableRule
     {
         /// <summary>

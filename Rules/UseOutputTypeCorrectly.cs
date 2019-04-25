@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Management.Automation;
 
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseOutputTypeCorrectly: Checks that objects returned in a cmdlet have their types declared in OutputType Attribute.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class UseOutputTypeCorrectly : SkipTypeDefinition, IScriptRule
     {
         #if !(PSV3||PSV4)

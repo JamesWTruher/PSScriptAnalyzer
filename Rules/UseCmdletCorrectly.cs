@@ -7,9 +7,6 @@ using System.Linq;
 using System.Management.Automation;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 
 namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// Use CmdletCorrectly: Check that cmdlets are invoked with the correct mandatory parameter
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class UseCmdletCorrectly : IScriptRule
     {
         /// <summary>

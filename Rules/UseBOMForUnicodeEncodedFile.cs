@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -18,9 +15,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseBOMForUnicodeEncodedFile: Checks if a file with missing BOM is ASCII encoded.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class UseBOMForUnicodeEncodedFile : IScriptRule
     {
         /// <summary>

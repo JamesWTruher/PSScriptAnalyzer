@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Text;
 
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// ProvideCommentHelp: Analyzes ast to check that cmdlets have help.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class ProvideCommentHelp : ConfigurableRule
     {
         private CommentHelpPlacement placement;

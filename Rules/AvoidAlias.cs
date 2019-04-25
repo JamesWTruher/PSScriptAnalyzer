@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Linq;
 using System.Management.Automation;
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidAlias: Check if cmdlet alias is used.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class AvoidAlias : IScriptRule
     {
         private readonly string whiteListArgName = "whitelist";

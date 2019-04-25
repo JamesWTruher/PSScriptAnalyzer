@@ -7,9 +7,6 @@ using System.Collections.Generic;
 using System.Management.Automation.Language;
 using System.Management.Automation;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Diagnostics;
 using System.Text;
 using System.Globalization;
@@ -20,9 +17,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// UseToExportFieldsInManifest: Checks if AliasToExport, CmdletsToExport, FunctionsToExport and VariablesToExport 
     /// fields do not use wildcards and $null in their entries. 
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class UseToExportFieldsInManifest : IScriptRule
     {
 

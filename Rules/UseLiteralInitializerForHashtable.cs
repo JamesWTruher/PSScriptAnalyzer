@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseLiteralInitializerForHashtable: Checks if hashtable is not initialized using [hashtable]::new or new-object hashtable.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class UseLiteralInitializerForHashtable : AstVisitor, IScriptRule
     {
         private List<DiagnosticRecord> diagnosticRecords;

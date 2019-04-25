@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Management.Automation.Language;
 using System.Globalization;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
@@ -15,9 +12,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseShouldProcessForStateChangingFunctions: Analyzes the ast to check if ShouldProcess is included in Advanced functions if the Verb of the function could change system state.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class UseShouldProcessForStateChangingFunctions : IScriptRule
     {
         /// <summary>

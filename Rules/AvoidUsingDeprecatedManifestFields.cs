@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Management.Automation.Language;
 using System.Management.Automation;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Linq;
 
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidUsingDeprecatedManifestFields: Run Test Module Manifest to check that no deprecated fields are being used.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class AvoidUsingDeprecatedManifestFields : IScriptRule
     {
         /// <summary>

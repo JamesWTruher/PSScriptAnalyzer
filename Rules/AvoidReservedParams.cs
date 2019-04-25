@@ -7,9 +7,6 @@ using System.Linq;
 using System.Management.Automation.Language;
 using System.Reflection;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Management.Automation;
 using System.Management.Automation.Internal;
@@ -19,9 +16,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidReservedParams: Analyzes the ast to check for reserved parameters in function definitions.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class AvoidReservedParams : IScriptRule
     {
         /// <summary>

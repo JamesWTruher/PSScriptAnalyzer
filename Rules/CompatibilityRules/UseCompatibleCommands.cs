@@ -20,9 +20,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// Rule to identify when commands used in a script will not
     /// be available in target PowerShell runtimes.
     /// </summary>
-#if !CORECLR
-    [System.ComponentModel.Composition.Export(typeof(IScriptRule))]
-#endif
     public class UseCompatibleCommands : CompatibilityRule
     {
         /// <summary>

@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Linq;
 using System.Management.Automation.Language;
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseConsistentWhitespace: Checks if whitespace usage is consistent throughout the source file.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class UseConsistentWhitespace : ConfigurableRule
     {
         private enum ErrorKind { BeforeOpeningBrace, Paren, Operator, SeparatorComma, SeparatorSemi, AfterOpeningBrace, BeforeClosingBrace, BeforePipe, AfterPipe };

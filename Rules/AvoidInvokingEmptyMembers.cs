@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 
 namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
@@ -17,9 +14,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidInvokingEmptyMembers: Analyzes the script to check if any non-constant members have been invoked.
     /// </summary>    
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class AvoidInvokingEmptyMembers : IScriptRule
     {
         /// <summary>

@@ -4,9 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation.Language;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 using System.Linq;
@@ -16,9 +13,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseDeclaredVarsMoreThanAssignments: Analyzes the ast to check that variables are used in more than just their assignment.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class UseDeclaredVarsMoreThanAssignments : IScriptRule
     {
         /// <summary>

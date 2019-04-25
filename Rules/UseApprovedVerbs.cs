@@ -7,9 +7,6 @@ using System.Linq;
 using System.Management.Automation;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Reflection;
 
@@ -18,9 +15,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// UseApprovedVerbs: Analyzes scripts to check that all defined functions use approved verbs.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class UseApprovedVerbs : IScriptRule {
         /// <summary>
         /// Analyze script to check that all defined functions use approved verbs

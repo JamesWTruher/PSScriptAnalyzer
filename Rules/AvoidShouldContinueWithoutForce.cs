@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 
 namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
@@ -16,9 +13,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// AvoidShouldContinueWithoutForceParameter: Check that if ShouldContinue is used,
     /// the function should have a boolean force parameter
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class AvoidShouldContinueWithoutForce : IScriptRule
     {
         /// <summary>

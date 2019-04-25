@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation.Language;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.IO;
 
@@ -21,9 +18,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     ///     For class based resources it should be present at the same folder level as resource psm1 file. 
     /// Tests folder should contain test script for given resource - file name should contain resource's name.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IDSCResourceRule))]
-#endif
     public class DscTestsPresent : IDSCResourceRule
     {
         /// <summary>

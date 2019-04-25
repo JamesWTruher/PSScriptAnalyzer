@@ -17,9 +17,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// Rule to check that .NET type usage in PowerShell is compatible
     /// with configured target PowerShell runtimes.
     /// </summary>
-#if !CORECLR
-    [System.ComponentModel.Composition.Export(typeof(IScriptRule))]
-#endif
     public class UseCompatibleTypes : CompatibilityRule
     {
         /// <summary>

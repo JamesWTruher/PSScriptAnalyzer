@@ -8,10 +8,6 @@
     <RootNamespace>Microsoft.PowerShell.ScriptAnalyzer</RootNamespace> <!-- Namespace needs to match Assembly name for ressource binding -->
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
-    <Reference Include="System.ComponentModel.Composition" />
-  </ItemGroup>
-
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net452' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
@@ -20,12 +16,9 @@
     <DefineConstants>$(DefineConstants);CORECLR</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <Compile Remove="SafeDirectoryCatalog.cs" />
-  </ItemGroup>
-
   <ItemGroup>
-  <Compile Remove="Commands\GetScriptAnalyzerLoggerCommand.cs" />
+    <Compile Remove="Commands\GetScriptAnalyzerLoggerCommand.cs" />
+    <Compile Remove="SafeDirectoryCatalog.cs" />
   </ItemGroup>
 
   <ItemGroup>

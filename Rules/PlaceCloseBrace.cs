@@ -3,9 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using System.Linq;
 using System.Management.Automation.Language;
@@ -16,9 +13,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// PlaceCloseBrace: Indicates if there should or should not be an empty line before a close brace.
     /// </summary>
-#if !CORECLR
-    [Export(typeof(IScriptRule))]
-#endif
     public class PlaceCloseBrace : ConfigurableRule
     {
         private HashSet<Token> tokensToIgnore;

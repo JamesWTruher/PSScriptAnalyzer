@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.Entity.Design" />
   </ItemGroup>
 

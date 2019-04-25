@@ -5,10 +5,6 @@ using System.Text.RegularExpressions;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 using System;
 using System.Collections.Generic;
-#if !CORECLR
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
-#endif // !CORECLR
 using System.IO;
 using System.Linq;
 using System.Management.Automation;
@@ -32,9 +28,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
         private IOutputWriter outputWriter;
         private Dictionary<string, object> settings;
         private readonly Regex s_aboutHelpRegex = new Regex("^about_.*help\\.txt$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-#if !CORECLR
-        private CompositionContainer container;
-#endif // !CORECLR
         Dictionary<string, List<string>> validationResults = new Dictionary<string, List<string>>();
         string[] includeRule;
         string[] excludeRule;
@@ -71,22 +64,11 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
 
         #region Properties
 
-#if CORECLR
+
         public IEnumerable<IScriptRule> ScriptRules { get; private set; }
         public IEnumerable<ITokenRule> TokenRules { get; private set; }
         public IEnumerable<ILogger> Loggers { get; private set; }
         public IEnumerable<IDSCResourceRule> DSCResourceRules { get; private set; }
-#else
-        [ImportMany]
-        public IEnumerable<IScriptRule> ScriptRules { get; private set; }
-        [ImportMany]
-        public IEnumerable<ITokenRule> TokenRules { get; private set; }
-        [ImportMany]
-        public IEnumerable<ILogger> Loggers { get; private set; }
-        [ImportMany]
-        public IEnumerable<IDSCResourceRule> DSCResourceRules { get; private set; }
-        // Initializes via ImportMany
-#endif // !CORECLR
 
         internal List<ExternalRule> ExternalRules { get; set; }
 
@@ -690,11 +672,8 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
 
             #endregion
 
-#if CORECLR
-            // For Full CLR logger is loaded via Composition
-            // But for Core CLR we need to load it explicitly
             this.Loggers = GetInterfaceImplementationsFromAssembly<ILogger>();
-#endif
+
             #region Initializes Rules
 
             var includeRuleList = new List<string>();
@@ -912,52 +891,10 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
             this.TokenRules = null;
             this.ExternalRules = null;
 
-#if CORECLR
             this.ScriptRules = GetInterfaceImplementationsFromAssembly<IScriptRule>();
             this.TokenRules = GetInterfaceImplementationsFromAssembly<ITokenRule>();
             this.DSCResourceRules = GetInterfaceImplementationsFromAssembly<IDSCResourceRule>();
-#else
-            // An aggregate catalog that combines multiple catalogs.
-            using (AggregateCatalog catalog = new AggregateCatalog())
-            {
-                // Adds all the parts found in the same directory.
-                string dirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                catalog.Catalogs.Add(
-                    new SafeDirectoryCatalog(
-                        dirName,
-                        this.outputWriter));
 
-                // Adds user specified directory
-                paths = result.ContainsKey("ValidDllPaths") ? result["ValidDllPaths"] : result["ValidPaths"];
-                foreach (string path in paths)
-                {
-                    if (String.Equals(Path.GetExtension(path), ".dll", StringComparison.OrdinalIgnoreCase))
-                    {
-                        catalog.Catalogs.Add(new AssemblyCatalog(path));
-                    }
-                    else
-                    {
-                        catalog.Catalogs.Add(
-                            new SafeDirectoryCatalog(
-                                path,
-                                this.outputWriter));
-                    }
-                }
-
-                // Creates the CompositionContainer with the parts in the catalog.
-                container = new CompositionContainer(catalog);
-
-                // Fills the imports of this object.
-                try
-                {
-                    container.ComposeParts(this);
-                }
-                catch (CompositionException compositionException)
-                {
-                    this.outputWriter.WriteWarning(compositionException.ToString());
-                }
-            }
-#endif // CORECLR
             if (!loadBuiltInRules)
             {
                 this.ScriptRules = null;

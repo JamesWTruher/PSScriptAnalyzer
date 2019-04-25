@@ -4,9 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation.Language;
-#if !CORECLR
-using System.ComponentModel.Composition;
-#endif
 using System.Globalization;
 using Microsoft.PowerShell.ScriptAnalyzer.Generic;
 
@@ -15,9 +12,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer.BuiltinRules
     /// <summary>
     /// AvoidDefaultValueForMandatoryParameter: Check if a mandatory parameter does not have a default value.
     /// </summary>
-#if !CORECLR
-[Export(typeof(IScriptRule))]
-#endif
     public class AvoidDefaultValueForMandatoryParameter : IScriptRule
     {
         /// <summary>
