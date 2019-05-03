@@ -40,11 +40,8 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
         public List<string> Warning;
         public List<string> Debug;
 
-        private HostedAnalyzer _hostedAnalyzer;
-
         public AnalyzerResult()
         {
-            _hostedAnalyzer = new HostedAnalyzer();
             Result = new List<DiagnosticRecord>();
             TerminatingErrors = new List<ErrorRecord>();
             Errors = new List<ErrorRecord>();
@@ -55,7 +52,6 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
 
         public AnalyzerResult(HostedAnalyzer analyzer)
         {
-            _hostedAnalyzer = analyzer;
             Result = new List<DiagnosticRecord>();
             TerminatingErrors = new List<ErrorRecord>();
             Errors = new List<ErrorRecord>();
@@ -64,20 +60,43 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
             Debug = new List<string>();
         }
 
-        public AnalyzerResult AnalyzeFile(string path, bool clearStreams = false)
+    }
+
+    public class FormatResult
+    {
+        public string OriginalScript;
+        public string FormattedScript;
+        public List<ErrorRecord> TerminatingErrors;
+        public List<ErrorRecord> Errors;
+        public List<string> Verbose;
+        public List<string> Warning;
+        public List<string> Debug;
+        public Range OriginalRange;
+        public Range UpdatedRange;
+        public bool Formatted;
+
+        public FormatResult(string originalScript)
         {
-            AnalyzerResult result = _hostedAnalyzer.AnalyzeFile(path, clearStreams);
-            return result;
+            OriginalScript = originalScript;
+            TerminatingErrors = new List<ErrorRecord>();
+            Errors = new List<ErrorRecord>();
+            Verbose = new List<string>();
+            Warning = new List<string>();
+            Debug = new List<string>();
         }
-        public AnalyzerResult AnalyzeScript(string script, bool clearStreams = false)
+
+        public FormatResult()
         {
-            AnalyzerResult result = _hostedAnalyzer.AnalyzeScript(script, clearStreams);
-            return result;
+            TerminatingErrors = new List<ErrorRecord>();
+            Errors = new List<ErrorRecord>();
+            Verbose = new List<string>();
+            Warning = new List<string>();
+            Debug = new List<string>();
         }
-        public AnalyzerResult AnalyzeAst(Ast ast, bool clearStreams = false)
+
+        public override string ToString()
         {
-            AnalyzerResult result = _hostedAnalyzer.AnalyzeScript(ast.Extent.Text, clearStreams);
-            return result;
+            return FormattedScript;
         }
 
     }
@@ -93,7 +112,7 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
 
         /// <summary>
         /// Set the configuration of the analyzer
-        /// 
+        ///
         /// <paramref name="config"/>
         /// </summary>
         /// <param name="config"></param>
@@ -163,14 +182,19 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
             }
         }
 
+        internal void UpdateSettings()
+        {
+
+        }
+
         public AnalyzerResult AnalyzeFile(string path, bool ClearStreams = false)
         {
             if ( ClearStreams )
             {
-                ResetStreams();     
+                ResetStreams();
             }
             DateTime start = DateTime.Now;
-            AnalyzerResult ar = new AnalyzerResult(this);
+            AnalyzerResult ar = new AnalyzerResult();
             OperationDuration.Add ( (DateTime.Now - start).TotalMilliseconds);
 
             var result = analyzer.AnalyzePath(path, delegate { return true; }, false);
@@ -180,7 +204,7 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
             ar.Verbose.AddRange(writer.Verbose);
             ar.Warning.AddRange(writer.Warning);
             ar.Debug.AddRange(writer.Debug);
-            
+
             return ar;
         }
 
@@ -188,7 +212,7 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
         {
             if ( ClearStreams )
             {
-                ResetStreams();     
+                ResetStreams();
             }
             AnalyzerResult ar = new AnalyzerResult(this);
             DateTime start = DateTime.Now;
@@ -202,6 +226,42 @@ namespace Microsoft.PowerShell.ScriptAnalyzer
             ar.Debug.AddRange(writer.Debug);
 
             return ar;
+        }
+
+        public FormatResult FormatScript(string scriptDefinition, bool ClearStreams = true)
+        {
+            if ( ClearStreams )
+            {
+                ResetStreams();
+            }
+            Range newRange;
+            bool Fixed;
+            Settings formattingSettings = GetFormattingSettings();
+            analyzer.UpdateSettings(formattingSettings);
+            FormatResult fr = new FormatResult(scriptDefinition);
+            fr.FormattedScript = Format(scriptDefinition , out newRange, out Fixed);
+            fr.UpdatedRange = newRange;
+            fr.Formatted = Fixed;
+            fr.TerminatingErrors.AddRange(writer.TerminatingErrors);
+            fr.Errors.AddRange(writer.Errors);
+            fr.Verbose.AddRange(writer.Verbose);
+            fr.Warning.AddRange(writer.Warning);
+            fr.Debug.AddRange(writer.Debug);
+            return fr;
+        }
+
+        internal Settings GetFormattingSettings()
+        {
+            return new Settings("/Users/james/src/github/forks/JamesWTruher/PSScriptAnalyzer/out/PSScriptAnalyzer/Settings/CodeFormattingOTBS.psd1");
+        }
+
+        // The implementation of the the formatting happens here
+        internal string Format(string scriptDefinition, out Range range, out bool scriptWasFixed)
+        {
+            EditableText script = new EditableText(scriptDefinition);
+            analyzer.UpdateSettings(GetFormattingSettings());
+            EditableText fixedscript = analyzer.Fix(script, null, out range, out scriptWasFixed);
+            return fixedscript.ToString();
         }
 
         internal class outputWriter : IOutputWriter
