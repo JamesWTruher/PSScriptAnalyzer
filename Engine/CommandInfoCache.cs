@@ -13,10 +13,15 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
     /// </summary>
     internal class CommandInfoCache
     {
+        private static bool _clearCache = true;
+        private static bool _initializeCache = true;
+        private static int hitCount = 0;
+        private static int missCount = 0;
+        private static ConcurrentDictionary<CommandLookupKey, DateTime> cacheMisses = new ConcurrentDictionary<CommandLookupKey, DateTime>();
+
         private readonly ConcurrentDictionary<CommandLookupKey, Lazy<CommandInfo>> _commandInfoCache;
 
         private readonly Helper _helperInstance;
-
         /// <summary>
         /// Create a fresh command info cache instance.
         /// </summary>
@@ -39,9 +44,34 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                 return null;
             }
 
-            var key = new CommandLookupKey(commandName, commandTypes);
+            if ( _clearCache ) {
+                _commandInfoCache.Clear();
+                _clearCache = false;
+            }
+
+            if ( _initializeCache ) {
+                InitializeCache();
+            }
+
+            CommandLookupKey key;
+            if ( commandTypes == null ) {
+                key = new CommandLookupKey(commandName, CommandTypes.All);
+            }
+            else {
+                key = new CommandLookupKey(commandName, commandTypes);
+            }
             // Atomically either use PowerShell to query a command info object, or fetch it from the cache
-            return _commandInfoCache.GetOrAdd(key, new Lazy<CommandInfo>(() => GetCommandInfoInternal(commandName, commandTypes))).Value;
+            Lazy<CommandInfo> ci;
+            if ( _commandInfoCache.TryGetValue(key, out ci) ) {
+                hitCount++;
+            }
+            else {
+                missCount++;
+                CommandInfo pci = GetCommandInfoInternal(commandName, commandTypes);
+                cacheMisses.TryAdd(key, DateTime.Now);
+                ci =  _commandInfoCache.GetOrAdd(key, new Lazy<CommandInfo>(() => pci));
+            }
+            return ci.Value;
         }
 
         /// <summary>
@@ -81,9 +111,27 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                     ps.AddParameter("CommandType", commandType);
                 }
 
-                return ps.Invoke<CommandInfo>()
-                    .FirstOrDefault();
+                return ps.Invoke<CommandInfo>().FirstOrDefault();
             }
+        }
+
+        /// <summary>
+        /// initialize the CommandInfoCache based on the standard runspacec
+        /// This will initialize the cache before an attempt to run Get-Command (which is expensive)
+        /// </summary>
+        private void InitializeCache()
+        {
+            using ( var ps = System.Management.Automation.PowerShell.Create()) {
+                foreach(CommandInfo ci in ps.Runspace.SessionStateProxy.InvokeCommand.GetCommands("*", CommandTypes.All, true)) {
+                    var key = new CommandLookupKey(ci.Name, ci.CommandType);
+                    _commandInfoCache.TryAdd(key, new Lazy<CommandInfo>(() => ci));
+                    key = new CommandLookupKey(ci.Name, null);
+                    _commandInfoCache.TryAdd(key, new Lazy<CommandInfo>(() => ci));
+                    key = new CommandLookupKey(ci.Name, CommandTypes.All);
+                    _commandInfoCache.TryAdd(key, new Lazy<CommandInfo>(() => ci));
+                }
+            }
+            _initializeCache = false;
         }
 
         private struct CommandLookupKey : IEquatable<CommandLookupKey>
@@ -114,6 +162,11 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                     hash = hash * 31 + CommandTypes.GetHashCode();
                     return hash;
                 }
+            }
+
+            public override string ToString()
+            {
+                return String.Format("{0}:{1}", Name, CommandTypes);
             }
         }
     }

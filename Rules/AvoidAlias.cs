@@ -126,25 +126,48 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
                         fileName,
                         commandName,
                         suggestedCorrections: GetCorrectionExtent(cmdAst, cmdletNameIfCommandNameWasAlias));
+                    // we found an alias, don't keep looking for anything else, but continue with the next cmdAst
+                    continue;
                 }
 
-                var isNativeCommand = Helper.Instance.GetCommandInfo(commandName, CommandTypes.Application | CommandTypes.ExternalScript) != null;
-                if (!isNativeCommand)
-                {
-                    var commdNameWithGetPrefix = $"Get-{commandName}";
-                    var cmdletNameIfCommandWasMissingGetPrefix = Helper.Instance.GetCommandInfo($"Get-{commandName}");
-                    if (cmdletNameIfCommandWasMissingGetPrefix != null)
-                    {
+                // determine whether we have a match to anything, if so, move to the next cmdAst
+                CommandInfo ci = Helper.Instance.GetCommandInfo(commandName, CommandTypes.All);
+                if ( ci != null ) {
+                    if ( ci.CommandType == CommandTypes.Alias ) {
                         yield return new DiagnosticRecord(
-                            string.Format(CultureInfo.CurrentCulture, Strings.AvoidUsingCmdletAliasesMissingGetPrefixError, commandName, commdNameWithGetPrefix),
+                            string.Format(CultureInfo.CurrentCulture, Strings.AvoidUsingCmdletAliasesError, commandName, commandName),
                             GetCommandExtent(cmdAst),
                             GetName(),
                             DiagnosticSeverity.Warning,
                             fileName,
                             commandName,
-                            suggestedCorrections: GetCorrectionExtent(cmdAst, commdNameWithGetPrefix));
+                            suggestedCorrections: GetCorrectionExtent(cmdAst, cmdletNameIfCommandNameWasAlias));
                     }
+                    continue;
                 }
+                /*
+                if ( ci == null || (ci.CommandType & (CommandTypes.ExternalScript | CommandTypes.Application | CommandTypes.Cmdlet)) != 0)
+                {
+                    continue;
+                }
+                */
+
+                // Now check for PowerShell's implicit 'Get-' prefix
+                var commandNameWithGetPrefix = $"Get-{commandName}";
+                var cmdletNameIfCommandWasMissingGetPrefix = Helper.Instance.GetCommandInfo(commandNameWithGetPrefix, CommandTypes.All);
+                if (cmdletNameIfCommandWasMissingGetPrefix != null)
+                {
+                    yield return new DiagnosticRecord(
+                        string.Format(CultureInfo.CurrentCulture, Strings.AvoidUsingCmdletAliasesMissingGetPrefixError, commandName, commandNameWithGetPrefix),
+                        GetCommandExtent(cmdAst),
+                        GetName(),
+                        DiagnosticSeverity.Warning,
+                        fileName,
+                        commandName,
+                        suggestedCorrections: GetCorrectionExtent(cmdAst, commandNameWithGetPrefix));
+                }
+
+
             }
         }
 
