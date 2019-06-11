@@ -240,6 +240,7 @@ function Start-ScriptAnalyzerBuild
         }
 
         $config = "PSV${PSVersion}${Configuration}"
+        write-verbose -verbose $config
 
         # Build ScriptAnalyzer
         # The Rules project has a dependency on the Engine therefore just building the Rules project is enough

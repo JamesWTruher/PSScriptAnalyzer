@@ -120,6 +120,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
             _runSpacePool = RunspaceFactory.CreateRunspacePool(1, 10);
             _runSpacePool.Open();
             _commandInfoCacheLazy = new Lazy<CommandInfoCache>(() => new CommandInfoCache(pssaHelperInstance: this, runspacePool: _runSpacePool));
+#if DEBUG
+            _commandInfoCacheLazy.Value.InitializeCache();
+#endif
         }
 
         /// <summary>

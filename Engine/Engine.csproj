@@ -86,11 +86,15 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'PSV3Debug' ">
-    <DefineConstants>$(DefineConstants);PSV3</DefineConstants>
+    <DefineConstants>$(DefineConstants);DEBUG;PSV3</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(Configuration)' == 'PSV4Debug' ">
-    <DefineConstants>$(DefineConstants);PSV3;PSV4</DefineConstants>
+    <DefineConstants>$(DefineConstants);PSV3;DEBUG;PSV4</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'PSV6Debug' ">
+    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
   </PropertyGroup>
 
 </Project>
