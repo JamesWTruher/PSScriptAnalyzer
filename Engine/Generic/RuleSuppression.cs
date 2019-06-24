@@ -107,6 +107,7 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic
             scopeSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             scopeSet.Add("function");
             scopeSet.Add("class");
+            scopeSet.Add("file");
         }
 
         /// <summary>
@@ -329,7 +330,27 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.Generic
                     IEnumerable<Ast> targetAsts = null;
 
                     string scope = ruleSupp.Scope;
-                    if (scope.Equals("function", StringComparison.OrdinalIgnoreCase))
+                    if ( scope.Equals("file", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // a scope set to file must only apply if it is at the beginning of the 
+                        // file, by walking up the parents without finding a function declaration
+                        // we can know where we are.
+                        Ast parent = attributeAst.Parent;
+                        bool inFunction = false;
+                        while ( parent != null ) {
+                            if ( parent is FunctionDefinitionAst ) {
+                                inFunction = true;
+                                break;
+                            }
+                            parent = parent.Parent;
+                        }
+                        if ( ! inFunction ) {
+                            result.Add(new RuleSuppression(ruleSupp.RuleName, ruleSupp.RuleSuppressionID, scopeAst.Extent.StartOffset, scopeAst.Extent.EndOffset,
+                            attributeAst.Extent.StartLineNumber, ruleSupp.Justification));
+                            continue;
+                        }
+                    }
+                    else if (scope.Equals("function", StringComparison.OrdinalIgnoreCase))
                     {
                         targetAsts = scopeAst.FindAll(ast => ast is FunctionDefinitionAst && reg.IsMatch((ast as FunctionDefinitionAst).Name), true);
                     }
