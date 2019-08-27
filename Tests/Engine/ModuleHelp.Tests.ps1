@@ -221,8 +221,15 @@ if ($PSVersionTable.PSVersion -lt [Version]'5.0.0') {
 	$paramBlackList += 'SaveDscDependency'
 }
 else {
+    # don't use alias at all
+    if ( $PSVersionTable.PSVersion.Major -ge 7 ) {
+        ${CommandType} = "Cmdlet","Function"
+    }
+    else {
+        ${CommandType} = "Cmdlet","Function","Workflow"
+    }
 	$ms = [Microsoft.PowerShell.Commands.ModuleSpecification]@{ ModuleName = $ModuleName; RequiredVersion = $RequiredVersion }
-	$commands = Get-Command -FullyQualifiedModule $ms -CommandType Cmdlet,Function,Workflow # Not alias
+	$commands = Get-Command -FullyQualifiedModule $ms -CommandType ${CommandType}
 }
 
 ## When testing help, remember that help is cached at the beginning of each session.
