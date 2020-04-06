@@ -780,6 +780,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                 }
             }
 
+#if DEBUG
+            using(ExecutionTimer.Start("LOADRULES")) {
+#endif
             try
             {
                 this.LoadRules(this.validationResults, invokeCommand, includeDefaultRules);
@@ -793,6 +796,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                         ex.HResult.ToString("X", CultureInfo.CurrentCulture),
                         ErrorCategory.NotSpecified, this));
             }
+#if DEBUG
+            }
+#endif
 
 #endregion
 
@@ -2074,6 +2080,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                 {
                     var tasks = allowedRules.Select(scriptRule => Task.Factory.StartNew(() =>
                     {
+#if DEBUG
+                        using ( ExecutionTimer.Start(scriptRule.GetName())) {
+#endif
                         bool helpRule = String.Equals(scriptRule.GetName(), "PSUseUTF8EncodingForHelpFile", StringComparison.OrdinalIgnoreCase);
                         List<object> result = new List<object>();
                         result.Add(string.Format(CultureInfo.CurrentCulture, Strings.VerboseRunningMessage, scriptRule.GetName()));
@@ -2114,8 +2123,10 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                         {
                             result.Add(new ErrorRecord(scriptRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, scriptAst.Extent.File));
                         }
-
                         verboseOrErrors.Add(result);
+#if DEBUG
+                        } // don't 
+#endif
                     }));
                     Task.Factory.ContinueWhenAll(tasks.ToArray(), t => verboseOrErrors.CompleteAdding());
                     while (!verboseOrErrors.IsCompleted)
@@ -2154,6 +2165,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                     {
                         this.outputWriter.WriteVerbose(string.Format(CultureInfo.CurrentCulture, Strings.VerboseRunningMessage, tokenRule.GetName()));
 
+#if DEBUG
+                        using(ExecutionTimer.Start(tokenRule.GetName())) {
+#endif
                         // Ensure that any unhandled errors from Rules are converted to non-terminating errors
                         // We want the Engine to continue functioning even if one or more Rules throws an exception
                         try
@@ -2173,6 +2187,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                         {
                             this.outputWriter.WriteError(new ErrorRecord(tokenRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, fileName));
                         }
+#if DEBUG
+                    }
+#endif
                     }
                 }
             }
@@ -2194,6 +2211,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
 
                             // Ensure that any unhandled errors from Rules are converted to non-terminating errors
                             // We want the Engine to continue functioning even if one or more Rules throws an exception
+#if DEBUG
+                        using(ExecutionTimer.Start(dscResourceRule.GetName())) {
+#endif
                             try
                             {
 #if PSV3
@@ -2220,6 +2240,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                             {
                                 this.outputWriter.WriteError(new ErrorRecord(dscResourceRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, filePath));
                             }
+#if DEBUG
+                            }
+#endif
                         }
                     }
                 }
@@ -2236,6 +2259,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
 
                             // Ensure that any unhandled errors from Rules are converted to non-terminating errors
                             // We want the Engine to continue functioning even if one or more Rules throws an exception
+#if DEBUG
+                            using(ExecutionTimer.Start(dscResourceRule.GetName())) {
+#endif
                             try
                             {
                                 var ruleRecords = dscResourceRule.AnalyzeDSCResource(scriptAst, filePath).ToList();
@@ -2253,6 +2279,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                             {
                                 this.outputWriter.WriteError(new ErrorRecord(dscResourceRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, filePath));
                             }
+#if DEBUG
+                            }
+#endif
                         }
                     }
 
@@ -2275,6 +2304,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
 
                         // Ensure that any unhandled errors from Rules are converted to non-terminating errors
                         // We want the Engine to continue functioning even if one or more Rules throws an exception
+#if DEBUG
+                            using(ExecutionTimer.Start(exRule.GetName())) {
+#endif
                         try
                         {
                             exRules.Add(exRule);
@@ -2283,6 +2315,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                         {
                             this.outputWriter.WriteError(new ErrorRecord(externalRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, fileName));
                         }
+#if DEBUG
+                            }
+#endif
                     }
                 }
 

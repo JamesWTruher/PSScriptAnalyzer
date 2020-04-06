@@ -53,10 +53,28 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
             diagnosticRecords.Clear();
             this.ast = ast;
             this.fileName = fileName;
+#if DEBUG
+using(ExecutionTimer.Start("UseShouldProcess:constructDigraph")) {
+#endif
             funcDigraph = new FunctionReferenceDigraph();
             ast.Visit(funcDigraph);
+#if DEBUG
+}
+#endif
+#if DEBUG
+using(ExecutionTimer.Start("UseShouldProcess:Check")) {
+#endif
             CheckForSupportShouldProcess();
+#if DEBUG
+}
+#endif
+#if DEBUG
+using(ExecutionTimer.Start("UseShouldProcess:FindViolations")) {
+#endif
             FindViolations();
+#if DEBUG
+}
+#endif
             foreach (var dr in diagnosticRecords)
             {
                 yield return dr;
@@ -404,8 +422,13 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
         {
             var commandsWithSupportShouldProcess = new List<Vertex>();
 
+            var vs = funcDigraph.GetVertices();
+#if DEBUG
+using ( ExecutionTimer.Start("UseShouldProcessCorrectly:GetAndCheck")) {
+#endif
             // for all the vertices without any neighbors check if they support shouldprocess
-            foreach (var v in funcDigraph.GetVertices())
+
+            foreach (var v in vs)
             {
                 if (funcDigraph.GetOutDegree(v) == 0)
                 {
@@ -415,7 +438,12 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
                     }
                 }
             }
-
+#if DEBUG
+}
+#endif
+#if DEBUG
+using ( ExecutionTimer.Start( "UseShouldProcessCorrectly:CheckForShouldProcess" ) ) {
+#endif
             if (commandsWithSupportShouldProcess.Count > 0)
             {
                 funcDigraph.AddVertex(implicitShouldProcessVertex);
@@ -424,6 +452,9 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer.BuiltinRules
                     funcDigraph.AddEdge(v, implicitShouldProcessVertex);
                 }
             }
+#if DEBUG
+}
+#endif
         }
     }
 

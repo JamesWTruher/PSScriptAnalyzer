@@ -65,10 +65,10 @@
     <PackageReference Include="System.Management.Automation" Version="7.0.0" />
   </ItemGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' AND '$(Configuration)' == 'PSV7Debug'">
-    <DefineConstants>$(DefineConstants);PSV7;CORECLR</DefineConstants>
+    <DefineConstants>$(DefineConstants);PSV7;CORECLR;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' AND '$(Configuration)' == 'PSV6Debug'">
-    <DefineConstants>$(DefineConstants);PSV6;CORECLR</DefineConstants>
+    <DefineConstants>$(DefineConstants);PSV6;CORECLR;DEBUG</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' AND '$(Configuration)' == 'PSV6Debug'">
     <PackageReference Include="System.Management.Automation" Version="6.1.0" />
@@ -108,11 +108,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'PSV3Debug' ">
-    <DefineConstants>$(DefineConstants);PSV3</DefineConstants>
+    <DefineConstants>$(DefineConstants);PSV3;DEBUG</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(Configuration)' == 'PSV4Debug' ">
-    <DefineConstants>$(DefineConstants);PSV3;PSV4</DefineConstants>
+    <DefineConstants>$(DefineConstants);PSV3;PSV4;DEBUG</DefineConstants>
   </PropertyGroup>
 
 </Project>
