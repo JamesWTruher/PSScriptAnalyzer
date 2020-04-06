@@ -27,8 +27,22 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
 {
     public sealed class ScriptAnalyzer
     {
-        #region Private members
+#if DEBUG
+        internal sealed class TaskDuration
+        {
+            public string RuleName;
+            public TimeSpan Elapsed;
+            public DateTime TimeCreated;
+            public TaskDuration(string name, TimeSpan elapsed) {
+                TimeCreated = DateTime.Now;
+                RuleName = name;
+                Elapsed = elapsed;
+            }
+        }
 
+        internal static ConcurrentBag<TaskDuration> taskDurations = new ConcurrentBag<TaskDuration>();
+#endif
+        #region Private members
         private IOutputWriter outputWriter;
         private Dictionary<string, object> settings;
         private readonly Regex s_aboutHelpRegex = new Regex("^about_.*help\\.txt$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -674,6 +688,8 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
             bool suppressedOnly = false,
             string profile = null)
         {
+            Stopwatch initWatch = new Stopwatch();
+            initWatch.Start();
             if (outputWriter == null)
             {
                 throw new ArgumentNullException("outputWriter");
@@ -780,6 +796,10 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                 }
             }
 
+#if DEBUG
+            Stopwatch loadRule = new Stopwatch();
+            loadRule.Start();
+#endif
             try
             {
                 this.LoadRules(this.validationResults, invokeCommand, includeDefaultRules);
@@ -793,6 +813,13 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                         ex.HResult.ToString("X", CultureInfo.CurrentCulture),
                         ErrorCategory.NotSpecified, this));
             }
+#if DEBUG
+            finally
+            {
+                loadRule.Stop();
+                taskDurations.Add(new TaskDuration("LOADRULE", loadRule.Elapsed));
+            }
+#endif
 
 #endregion
 
@@ -820,6 +847,10 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
             }
 
 #endregion
+#if DEBUG
+            initWatch.Stop();
+            taskDurations.Add(new TaskDuration("Initialize", initWatch.Elapsed));
+#endif
         }
 
         private List<string> GetValidCustomRulePaths(string[] customizedRulePath, PathIntrinsics path)
@@ -2074,6 +2105,10 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                 {
                     var tasks = allowedRules.Select(scriptRule => Task.Factory.StartNew(() =>
                     {
+#if DEBUG
+                        var sw = new Stopwatch();
+                        sw.Start();
+#endif
                         bool helpRule = String.Equals(scriptRule.GetName(), "PSUseUTF8EncodingForHelpFile", StringComparison.OrdinalIgnoreCase);
                         List<object> result = new List<object>();
                         result.Add(string.Format(CultureInfo.CurrentCulture, Strings.VerboseRunningMessage, scriptRule.GetName()));
@@ -2114,6 +2149,13 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                         {
                             result.Add(new ErrorRecord(scriptRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, scriptAst.Extent.File));
                         }
+#if DEBUG
+                        finally
+                        {
+                            sw.Stop();
+                            taskDurations.Add(new TaskDuration(scriptRule.GetName(), sw.Elapsed));
+                        }
+#endif
 
                         verboseOrErrors.Add(result);
                     }));
@@ -2156,6 +2198,10 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
 
                         // Ensure that any unhandled errors from Rules are converted to non-terminating errors
                         // We want the Engine to continue functioning even if one or more Rules throws an exception
+#if DEBUG
+                        var sw = new Stopwatch();
+                        sw.Start();
+#endif
                         try
                         {
                             var ruleRecords = tokenRule.AnalyzeTokens(scriptTokens, filePath).ToList();
@@ -2173,6 +2219,13 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                         {
                             this.outputWriter.WriteError(new ErrorRecord(tokenRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, fileName));
                         }
+#if DEBUG
+                        finally
+                        {
+                            sw.Stop();
+                            taskDurations.Add(new TaskDuration(tokenRule.GetName(), sw.Elapsed));
+                        }
+#endif
                     }
                 }
             }
@@ -2190,6 +2243,10 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                     {
                         if (IsRuleAllowed(dscResourceRule))
                         {
+#if DEBUG
+                            var sw = new Stopwatch();
+                            sw.Start();
+#endif
                             this.outputWriter.WriteVerbose(string.Format(CultureInfo.CurrentCulture, Strings.VerboseRunningMessage, dscResourceRule.GetName()));
 
                             // Ensure that any unhandled errors from Rules are converted to non-terminating errors
@@ -2220,6 +2277,13 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                             {
                                 this.outputWriter.WriteError(new ErrorRecord(dscResourceRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, filePath));
                             }
+#if DEBUG
+                            finally
+                            {
+                                sw.Stop();
+                                taskDurations.Add(new TaskDuration(dscResourceRule.GetName(), sw.Elapsed));
+                            }
+#endif
                         }
                     }
                 }
@@ -2232,6 +2296,10 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                     {
                         if (IsRuleAllowed(dscResourceRule))
                         {
+#if DEBUG
+                            var sw = new Stopwatch();
+                            sw.Start();
+#endif
                             this.outputWriter.WriteVerbose(string.Format(CultureInfo.CurrentCulture, Strings.VerboseRunningMessage, dscResourceRule.GetName()));
 
                             // Ensure that any unhandled errors from Rules are converted to non-terminating errors
@@ -2253,6 +2321,13 @@ namespace Microsoft.Windows.PowerShell.ScriptAnalyzer
                             {
                                 this.outputWriter.WriteError(new ErrorRecord(dscResourceRuleException, Strings.RuleErrorMessage, ErrorCategory.InvalidOperation, filePath));
                             }
+#if DEBUG
+                            finally
+                            {
+                                sw.Stop();
+                                taskDurations.Add(new TaskDuration(dscResourceRule.GetName(), sw.Elapsed));
+                            }
+#endif
                         }
                     }
 
